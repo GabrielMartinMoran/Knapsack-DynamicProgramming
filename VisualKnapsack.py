@@ -2,6 +2,7 @@ import pygame
 from threading import Thread
 from KnapsackSolver import *
 import time
+from TablePlotter import *
 
 WHITE_COLOR = (255, 255, 255)
 BLACK_COLOR = (0, 0, 0)
@@ -21,6 +22,8 @@ class VisualKnapsack:
 
     def __init__(self, items):
         self.__have_to_solve = False
+        self.__have_to_display_table = False
+        self.__result_table = None
         self.__knapsack_capacity = 0
         self.__items_inside = []
         self.__items_outside = []
@@ -44,6 +47,7 @@ class VisualKnapsack:
             self.__draw_screen()
             pygame.display.flip()
             self.__clock.tick(5)
+            self.__check_if_have_to_display_table()
 
     def __detect_exit(self):
         for event in pygame.event.get():
@@ -54,8 +58,9 @@ class VisualKnapsack:
         if(not self.__have_to_solve):
             return
         print("Solver started!")
-        solution = self.__solver.solve(self.__items_to_solve, self.__knapsack_capacity)
-        self.__solver.print_table()
+        solution, self.__result_table = self.__solver.solve(
+            self.__items_to_solve, self.__knapsack_capacity)
+        #self.__solver.print_table()
         print("\nSolution:", [x.id for x in solution.items])
         print("Total value:", solution.total_value)
         print("Total weight:", solution.total_weight)
@@ -67,7 +72,14 @@ class VisualKnapsack:
                 self.__items_inside.append(item)
             else:
                 self.__items_outside.append(item)
+        self.__have_to_display_table = True
         self.__have_to_solve = False
+
+    def __check_if_have_to_display_table(self):
+        if(not self.__have_to_display_table):
+            return
+        TablePlotter.plot_table(self.__result_table)
+        self.__have_to_display_table = False
 
     def __draw_screen(self):
         self.__screen.blit(RESOURCES["knapsack"], (int(WIDTH / 2), 0))
@@ -75,7 +87,8 @@ class VisualKnapsack:
         self.__draw_items_outside_knapsack()
 
     def __draw_items_inside_knapsack(self):
-        self.__draw_items(self.__items_inside, int(WIDTH / 2) + ITEMS_IMAGE_H_SEPARATOR)
+        self.__draw_items(self.__items_inside, int(
+            WIDTH / 2) + ITEMS_IMAGE_H_SEPARATOR)
 
     def __draw_items_outside_knapsack(self):
         self.__draw_items(self.__items_outside, ITEMS_IMAGE_H_SEPARATOR)

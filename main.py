@@ -2,6 +2,7 @@ from KnapsackSolver import *
 from Item import *
 from ItemGenerator import *
 from VisualKnapsack import *
+from TablePlotter import *
 import time
 from threading import Thread
 
@@ -26,8 +27,9 @@ ITEMS = [
 
 def main():
     solver = KnapsackSolver()
-    solution = solver.solve(ITEMS, KNAPSACK_CAPACITY)
-    solver.print_table()
+    solution, table = solver.solve(ITEMS, KNAPSACK_CAPACITY)
+    #solver.print_table()
+    TablePlotter.plot_table(table)
     print("\nSolution:", [x.id for x in solution.items])
     print("Total value:", solution.total_value)
     print("Total weight:", solution.total_weight)

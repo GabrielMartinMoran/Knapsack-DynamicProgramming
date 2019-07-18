@@ -12,7 +12,7 @@ class KnapsackSolver:
         self.__generate_table(items, capacity)
         for i_index, item in enumerate(items):
             self.__add_item_to_table(item)
-        return self.__table[len(self.__table) - 1][capacity]
+        return self.__table[len(self.__table) - 1][capacity], self.__table
 
     def __get_prev_without_last_item(self, prev_item, column):
         for i, x in enumerate(column):
