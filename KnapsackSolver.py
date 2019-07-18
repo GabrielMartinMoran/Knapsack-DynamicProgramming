@@ -9,10 +9,14 @@ class KnapsackSolver:
         self.__table_index = 0
 
     def solve(self, items, capacity):
-        self.__generate_table(items, capacity)
-        for i_index, item in enumerate(items):
+        sorted_items = self.__sort_items(items)
+        self.__generate_table(sorted_items, capacity)
+        for i_index, item in enumerate(sorted_items):
             self.__add_item_to_table(item)
         return self.__table[len(self.__table) - 1][capacity], self.__table
+
+    def __sort_items(self, items):
+        return sorted(items, key=lambda item: item.value / item.weight, reverse=True)
 
     def __get_prev_without_last_item(self, prev_item, column):
         for i, x in enumerate(column):

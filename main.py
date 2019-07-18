@@ -6,11 +6,11 @@ from TablePlotter import *
 import time
 from threading import Thread
 
-RUN_VISUAL = True
+RUN_VISUAL = False
 
 
 KNAPSACK_CAPACITY = 20
-ITEMS_TO_GENERATE = 16
+ITEMS_TO_GENERATE = 16 #Max visible 117
 
 ITEMS = [
     Item("Item 1",  8, 4),
