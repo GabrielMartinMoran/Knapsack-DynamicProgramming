@@ -5,12 +5,14 @@ import time
 from TablePlotter import *
 
 WHITE_COLOR = (255, 255, 255)
+GREEN_COLOR = (124,252,0)
 BLACK_COLOR = (0, 0, 0)
 (WIDTH, HEIGHT) = (1000, 600)
 WINDOW_NAME = "Knapsack Solver"
 FIRST_IMAGE_SIZE_REECALATE = 16
 SECOND_IMAGE_SIZE_REECALATE = 49
 RESOURCES = {
+    "background": pygame.image.load('resources/bg.png'),
     "knapsack": pygame.image.load('resources/Knapsack.png')
 }
 
@@ -34,7 +36,6 @@ class VisualKnapsack:
         pygame.display.set_caption(WINDOW_NAME)
         self.__screen.fill(BLACK_COLOR)
         pygame.display.flip()
-        self.__clock = pygame.time.Clock()
         self.set_items_to_solve(items)
 
     def main_loop(self):
@@ -43,9 +44,8 @@ class VisualKnapsack:
             self.__check_if_have_to_solve()
             self.__screen.fill(BLACK_COLOR)
             self.__draw_screen()
-            pygame.display.flip()
+            pygame.display.flip()            
             self.__check_if_have_to_display_table()
-            # self.__clock.tick(5)
             time.sleep(0.5)
 
     def __detect_exit(self):
@@ -56,6 +56,10 @@ class VisualKnapsack:
     def __check_if_have_to_solve(self):
         if(not self.__have_to_solve):
             return
+        # Agregamos el texto de resolviendo
+        self.__draw_screen()
+        self.__draw_solving_message()
+        pygame.display.flip()
         print("Solver started!")
         solution, self.__result_table = self.__solver.solve(
             self.__items_to_solve, self.__knapsack_capacity)
@@ -81,6 +85,7 @@ class VisualKnapsack:
         self.__have_to_display_table = False
 
     def __draw_screen(self):
+        self.__screen.blit(RESOURCES["background"], (0, 0))
         self.__screen.blit(RESOURCES["knapsack"], (int(WIDTH / 2), 0))
         self.__draw_items_inside_knapsack()
         self.__draw_items_outside_knapsack()
@@ -115,20 +120,25 @@ class VisualKnapsack:
             else:
                 x += self.__get_images_size() + self.__get_images_h_separator()
 
+    def __draw_solving_message(self):
+        renderer = pygame.font.SysFont('Comic Sans MS', 60)
+        value_text = renderer.render("Resolviendo...", False, GREEN_COLOR)
+        self.__screen.blit(value_text, (int(WIDTH / 2) - int(WIDTH / 6), int(HEIGHT / 2) - int(HEIGHT / 8)))
+
     def set_items_to_solve(self, items):
-        self.__items_to_solve = items
+        self.__items_to_solve=items
         for x in items:
             if(x.image_path not in RESOURCES):
-                RESOURCES[x.image_path] = pygame.image.load(x.image_path)
-                RESOURCES[x.image_path] = pygame.transform.scale(
+                RESOURCES[x.image_path]=pygame.image.load(x.image_path)
+                RESOURCES[x.image_path]=pygame.transform.scale(
                     RESOURCES[x.image_path], (self.__get_images_size(), self.__get_images_size()))
-        self.__items_outside = items
-        self.__text_renderer = pygame.font.SysFont(
+        self.__items_outside=items
+        self.__text_renderer=pygame.font.SysFont(
             'Comic Sans MS', self.__get_text_size())
 
     def begin_solver(self, knapsack_capacity):
-        self.__have_to_solve = True
-        self.__knapsack_capacity = knapsack_capacity
+        self.__have_to_solve=True
+        self.__knapsack_capacity=knapsack_capacity
 
     def __get_images_size(self):
         if(len(self.__items_to_solve) > SECOND_IMAGE_SIZE_REECALATE):
