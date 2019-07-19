@@ -9,7 +9,7 @@ from threading import Thread
 RUN_VISUAL = False
 
 WAIT_UNTIL_SOLVE = 5 #Segundos
-KNAPSACK_CAPACITY = 20
+KNAPSACK_CAPACITY = 10
 ITEMS_TO_GENERATE = 16 # Max visible 117
 
 
@@ -27,9 +27,15 @@ def main():
         Item("Item 9",  2, 5),
         Item("Item 10", 9, 7),
     ]
+    items = [
+        Item("Item 1",  8, 5),
+        Item("Item 2",  4, 3),
+        Item("Item 3",  1, 2),
+        Item("Item 4",  6, 4)
+    ]
     solution, table = solver.solve(items, KNAPSACK_CAPACITY)
-    solver.print_table()
-    #TablePlotter.plot_table(table)
+    #solver.print_table()
+    TablePlotter.plot_table(table)
     print("\nSolution:", [x.id for x in solution.items])
     print("Total value:", solution.total_value)
     print("Total weight:", solution.total_weight)

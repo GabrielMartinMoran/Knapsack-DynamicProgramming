@@ -16,7 +16,7 @@ class KnapsackSolver:
         return self.__table[len(self.__table) - 1][capacity], self.__table
 
     def __sort_items(self, items):
-        return sorted(items, key=lambda item: item.value / item.weight, reverse=True)
+        return sorted(items, key=lambda item: item.value / item.weight, reverse=False)
 
     def __get_prev_without_last_item(self, prev_item, column):
         for i, x in enumerate(column):
@@ -72,33 +72,3 @@ class KnapsackSolver:
                 line += str(self.__table[x][i].total_value).rjust(4) + "   "
             print(line)
             i += 1
-
-    """
-     def __add_item_to_table(self, item):
-        for x in range(len(self.__table[0])):
-            if(x >= item.weight):
-                # Si el peso de los items que ya tiene mas el actual es menor o igual que el tamano de la mochila
-                if(self.__table[self.__table_index - 1][x].total_weight + item.weight <= x):
-                    self.__table[self.__table_index][x] = deepcopy(
-                        self.__table[self.__table_index - 1][x])
-                    self.__table[self.__table_index][x].add_item(item)
-                else:
-                    # vemos cual es mas valioso
-                    # Si los dos entran, el actual se tiene que comparar contra el primer anterior distinto de cero
-                    if(item.value > self.__get_first_cell_with_value_disctint_than_zero(self.__table[self.__table_index - 1]).total_value):
-                        self.__table[self.__table_index][x].add_item(item)
-                    elif (self.__table[self.__table_index - 1][x].total_value > self.__get_first_cell_with_value_disctint_than_zero(self.__table[self.__table_index - 1]).total_value and
-                        self.__get_first_cell_with_value_disctint_than_zero(self.__table[self.__table_index - 1]).total_weight + item.weight <= x and
-                        self.__table[self.__table_index - 1][x].total_value < self.__get_first_cell_with_value_disctint_than_zero(self.__table[self.__table_index - 1]).total_value + item.value):
-                        print("ENTRO:", self.__table_index, x)
-                        self.__table[self.__table_index][x] = deepcopy(self.__get_first_cell_with_value_disctint_than_zero(self.__table[self.__table_index - 1]))
-                        self.__table[self.__table_index][x].add_item(item)
-                    else:
-                        self.__table[self.__table_index][x] = deepcopy(
-                            self.__table[self.__table_index - 1][x])
-            else:
-                self.__table[self.__table_index][x] = deepcopy(
-                    self.__table[self.__table_index - 1][x])
-        if(self.__table_index < len(self.__table) - 1):
-            self.__table_index += 1
-    """
