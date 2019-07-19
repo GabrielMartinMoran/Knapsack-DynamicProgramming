@@ -8,9 +8,9 @@ from threading import Thread
 
 RUN_VISUAL = False
 
-WAIT_UNTIL_SOLVE = 5 #Segundos
+WAIT_UNTIL_SOLVE = 5  # Segundos
 KNAPSACK_CAPACITY = 10
-ITEMS_TO_GENERATE = 60 # Max visible 117
+ITEMS_TO_GENERATE = 60  # Max visible 117
 
 
 def main():
@@ -40,11 +40,11 @@ def main():
         Item("Item 4",  6, 4)
     ]
     solution, table = solver.solve(items, KNAPSACK_CAPACITY)
-    #solver.print_table()
-    TablePlotter.plot_table(table)
+    # solver.print_table()
     print("\nSolution:", [x.id for x in solution.items])
     print("Total value:", solution.total_value)
     print("Total weight:", solution.total_weight)
+    TablePlotter.plot_table(table)
 
 
 def delayed_solve(visual_knspsack):
