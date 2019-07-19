@@ -10,12 +10,14 @@ RUN_VISUAL = False
 
 WAIT_UNTIL_SOLVE = 5 #Segundos
 KNAPSACK_CAPACITY = 10
-ITEMS_TO_GENERATE = 16 # Max visible 117
+ITEMS_TO_GENERATE = 60 # Max visible 117
 
 
 def main():
     solver = KnapsackSolver()
+    """
     items = [
+        Item("Item 0",  5, 14),
         Item("Item 1",  8, 4),
         Item("Item 2",  5, 6),
         Item("Item 3",  2, 5),
@@ -26,7 +28,11 @@ def main():
         Item("Item 8",  3, 4),
         Item("Item 9",  2, 5),
         Item("Item 10", 9, 7),
+        Item("Item 11", 2, 7),
+        Item("Item 12", 4, 5),
+        Item("Item 13", 6, 10),
     ]
+    """
     items = [
         Item("Item 1",  8, 5),
         Item("Item 2",  4, 3),

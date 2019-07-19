@@ -32,3 +32,10 @@ class TableCell:
     #Devuelve el valor posible total si se agregara el item recibido por parametro
     def evaluate_value(self, item):
         return self.total_value + item.value
+
+    def clone(self):
+        cell = TableCell()
+        #para que se pase por referencia
+        for x in self.items:
+            cell.add_item(x)
+        return cell
