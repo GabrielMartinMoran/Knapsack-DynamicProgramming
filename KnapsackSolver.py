@@ -21,7 +21,6 @@ class KnapsackSolver:
         return self.__table[len(self.__table) - 1][capacity], self.__table
 
     def __backtrace_table(self, items):
-        #print("ITEMS ORDENADOS:", [x.id for x in items])
         cell = TableCell()
         col = len(self.__table) - 1
         row = len(self.__table[0]) - 1

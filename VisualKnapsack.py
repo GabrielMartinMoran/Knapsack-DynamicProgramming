@@ -19,11 +19,11 @@ RESOURCES = {
 
 class VisualKnapsack:
 
-    def __init__(self, items):
+    def __init__(self, items, max_capacity):
         self.__have_to_solve = False
         self.__have_to_display_table = False
         self.__result_table = None
-        self.__knapsack_capacity = 0
+        self.__knapsack_capacity = max_capacity
         self.__items_inside = []
         self.__items_outside = []
         self.__items_to_solve = []
@@ -89,6 +89,7 @@ class VisualKnapsack:
         self.__screen.blit(RESOURCES["knapsack"], (int(WIDTH / 2), 0))
         self.__draw_items_inside_knapsack()
         self.__draw_items_outside_knapsack()
+        self.__draw_knapsack_capacity()
 
     def __draw_items_inside_knapsack(self):
         self.__draw_items(self.__items_inside, int(
@@ -125,6 +126,13 @@ class VisualKnapsack:
         value_text = renderer.render("Resolviendo...", False, GREEN_COLOR)
         self.__screen.blit(value_text, (int(WIDTH / 2) - int(WIDTH / 6), int(HEIGHT / 2) - int(HEIGHT / 8)))
 
+
+    def __draw_knapsack_capacity(self):
+        renderer = pygame.font.SysFont('Comic Sans MS', 20)
+        value_text = renderer.render("Capacidad: " + str(self.__knapsack_capacity), False, WHITE_COLOR)
+        self.__screen.blit(value_text, (int(WIDTH / 2) + int(WIDTH / 6) + 20, 2))
+
+
     def set_items_to_solve(self, items):
         self.__items_to_solve=items
         for x in items:
@@ -136,9 +144,8 @@ class VisualKnapsack:
         self.__text_renderer=pygame.font.SysFont(
             'Comic Sans MS', self.__get_text_size())
 
-    def begin_solver(self, knapsack_capacity):
+    def begin_solver(self):
         self.__have_to_solve=True
-        self.__knapsack_capacity=knapsack_capacity
 
     def __get_images_size(self):
         if(len(self.__items_to_solve) > SECOND_IMAGE_SIZE_REECALATE):

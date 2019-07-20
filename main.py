@@ -6,16 +6,15 @@ from TablePlotter import *
 import time
 from threading import Thread
 
-RUN_VISUAL = False
+RUN_VISUAL = True
 
 WAIT_UNTIL_SOLVE = 5  # Segundos
-KNAPSACK_CAPACITY = 10
-ITEMS_TO_GENERATE = 60  # Max visible 117
+KNAPSACK_CAPACITY = 20
+ITEMS_TO_GENERATE = 16  # Max visible 117
 
 
 def main():
     solver = KnapsackSolver()
-    """
     items = [
         Item("Item 0",  5, 14),
         Item("Item 1",  8, 4),
@@ -39,6 +38,7 @@ def main():
         Item("Item 3",  1, 2),
         Item("Item 4",  6, 4)
     ]
+    """
     solution, table = solver.solve(items, KNAPSACK_CAPACITY)
     # solver.print_table()
     print("\nSolution:", [x.id for x in solution.items])
@@ -49,13 +49,13 @@ def main():
 
 def delayed_solve(visual_knspsack):
     time.sleep(WAIT_UNTIL_SOLVE)
-    visual_knspsack.begin_solver(KNAPSACK_CAPACITY)
+    visual_knspsack.begin_solver()
 
 
 def visual_main():
     item_generator = ItemGenerator()
     items = item_generator.generate(ITEMS_TO_GENERATE)
-    knapsack = VisualKnapsack(items)
+    knapsack = VisualKnapsack(items, KNAPSACK_CAPACITY)
     thread = Thread(target=delayed_solve, args=(knapsack,))
     thread.start()
     knapsack.main_loop()
