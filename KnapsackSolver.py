@@ -64,13 +64,16 @@ class KnapsackSolver:
                     self.__table[self.__table_index][x] = self.__table[self.__table_index - 1][x].clone()
                     self.__table[self.__table_index][x].add_item(item)
                 else:
+                    #Obtenemos el de la columna anterior, misma fila
                     prev = self.__table[self.__table_index - 1][x]
+                    #Obtenemos el de la columna anterior, donde la fila es la del elemento anterior al de la misma fila
                     prev_without_item = self.__get_prev_without_last_item(
                         prev.get_last_item(), self.__table[self.__table_index - 1])
                     if(prev_without_item.could_add_item(item, x) and prev_without_item.evaluate_value(item) > prev.total_value):
                         self.__table[self.__table_index][x] = prev_without_item.clone(
                         )
                         self.__table[self.__table_index][x].add_item(item)
+                    #Comparamos contra el de la fila superior
                     elif (self.__table[self.__table_index - 1][x].total_value > self.__table[self.__table_index][x - 1].total_value):
                         self.__table[self.__table_index][x] = self.__table[self.__table_index - 1][x].clone()
                     else:

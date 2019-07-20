@@ -1,23 +1,25 @@
 from KnapsackSolver import *
 from Item import *
 from ItemGenerator import *
-from VisualKnapsack import *
 from TablePlotter import *
 import time
 from threading import Thread
 
-RUN_VISUAL = True
-
-KNAPSACK_CAPACITY = 20
+#Para el resolverdor visual con pygame
+RUN_VISUAL = False
 ITEMS_TO_GENERATE = 16  # Max visible 117
-
 WAIT_UNTIL_VISUAL_SOLVE = 5  # Segundos
 
+if RUN_VISUAL:
+    from VisualKnapsack import *
+
+
+#Capacidad de la mochila
+KNAPSACK_CAPACITY = 20
 
 def main():
     solver = KnapsackSolver()
     items = [
-        Item("Item 0",  5, 14),
         Item("Item 1",  8, 4),
         Item("Item 2",  5, 6),
         Item("Item 3",  2, 5),
