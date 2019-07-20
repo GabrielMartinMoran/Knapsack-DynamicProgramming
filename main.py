@@ -8,9 +8,10 @@ from threading import Thread
 
 RUN_VISUAL = True
 
-WAIT_UNTIL_SOLVE = 5  # Segundos
 KNAPSACK_CAPACITY = 20
 ITEMS_TO_GENERATE = 16  # Max visible 117
+
+WAIT_UNTIL_VISUAL_SOLVE = 5  # Segundos
 
 
 def main():
@@ -48,7 +49,7 @@ def main():
 
 
 def delayed_solve(visual_knspsack):
-    time.sleep(WAIT_UNTIL_SOLVE)
+    time.sleep(WAIT_UNTIL_VISUAL_SOLVE)
     visual_knspsack.begin_solver()
 
 
