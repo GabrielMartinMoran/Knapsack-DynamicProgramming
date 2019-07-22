@@ -18,6 +18,7 @@ if RUN_VISUAL:
 KNAPSACK_CAPACITY = 7
 
 def main():
+    print("Knapsack capacity:", KNAPSACK_CAPACITY)
     solver = KnapsackSolver()
     """
     items = [
@@ -35,13 +36,16 @@ def main():
         Item("Item 12", 4, 5),
         Item("Item 13", 6, 10),
     ]
+    """
+    """
     items = [
         Item("Item 1",  8, 5),
         Item("Item 2",  4, 3),
         Item("Item 3",  1, 2),
         Item("Item 4",  6, 4)
     ]
-    """    
+    """
+    
     items = [
         Item("Item 1",  2, 16),
         Item("Item 2",  3, 19),

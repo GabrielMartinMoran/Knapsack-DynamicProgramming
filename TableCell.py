@@ -1,3 +1,5 @@
+from Item import *
+
 class TableCell:
     
     def __init__(self):
@@ -17,6 +19,8 @@ class TableCell:
         return cell
 
     def get_last_item(self):
+        if(len(self.items) == 0):
+            return Item(0, 0, 0)
         return self.items[len(self.items) - 1]
 
     def contains_item(self, item):

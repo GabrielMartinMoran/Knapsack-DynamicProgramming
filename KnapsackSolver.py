@@ -11,7 +11,6 @@ class KnapsackSolver:
         self.__table_index = 0
 
     def solve(self, items, capacity):
-        print("Knapsack capacity:", capacity)
         self.__generate_table(items, capacity)
         for i_index, item in enumerate(items):
             self.__add_item_to_table(item)
@@ -45,7 +44,7 @@ class KnapsackSolver:
             print("Validacion de backtrace erronea!")
             print("El resultado correcto es:", [x.id for x in self.__table[len(
                 self.__table) - 1][len(self.__table[0]) - 1].items])
-
+    """
     def __get_best_cell_where_fits(self, current_row, column, item):
         max_weight = current_row
         max_cell = column[0]
@@ -56,10 +55,39 @@ class KnapsackSolver:
             evaluated_value = cell.evaluate_value(item)
             if(cell.could_add_item(item, max_weight) and evaluated_value > max_cell.total_value + item.value):
                 max_cell = cell
+    """
+
+    def __get_previous_value_in_column(self, current_row, column):
+        comparison_value = column[current_row].total_value
+        for i in range(1, len(column)):
+            if(current_row - i < 0):
+                return column[0]
+            if(column[current_row - i].total_value == comparison_value - column[current_row].get_last_item().value):
+                return column[current_row - i]
+
+    def __get_best_cell_where_fits(self, current_row, column, item):
+        max_weight = current_row
+        cell = column[current_row]
+        cell_without_item = self.__get_previous_value_in_column(current_row, column)
+        print("cell.total_value", cell.total_value)
+        print("cell_without_item.total_value", cell_without_item.total_value)
+        ret = None
+        print("cell.could_add_item(item, max_weight)", cell.could_add_item(item, max_weight))
+        print("cell.evaluate_value(item)", cell.evaluate_value(item))
+        prev_cell_value_for_compare = cell.total_value
+        if(cell.could_add_item(item, max_weight)):
+            ret = cell
+            prev_cell_value_for_compare += item.value
+        print("cell_without_item.could_add_item(item, max_weight)", cell_without_item.could_add_item(item, max_weight))
+        print("cell_without_item.evaluate_value(item)", cell_without_item.evaluate_value(item))
+        if(cell_without_item.could_add_item(item, max_weight) and cell_without_item.evaluate_value(item) > prev_cell_value_for_compare):
+            ret = cell_without_item
+        return ret
 
     def __add_item_to_table(self, item):
         for x in range(len(self.__table[0])):
             # ESTRUCTURA DE LA TABLA: self.__table [COLUMNA] [FILA]
+            print("Columna:", self.__table_index, "| Fila:", x)
             if(x >= item.weight):
                 best_cell_where_fits = self.__get_best_cell_where_fits(
                     x, self.__table[self.__table_index - 1], item)
