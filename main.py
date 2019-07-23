@@ -3,12 +3,10 @@ from Item import *
 from ItemGenerator import *
 from TablePlotter import *
 import time
-from threading import Thread
 
 #Para el resolverdor visual con pygame
 RUN_VISUAL = False
-ITEMS_TO_GENERATE = 16  # Max visible 117
-WAIT_UNTIL_VISUAL_SOLVE = 5  # Segundos
+ITEMS_TO_GENERATE = 117  # Max visible 117
 
 if RUN_VISUAL:
     from VisualKnapsack import *
@@ -45,7 +43,6 @@ def main():
         Item("Item 4",  6, 4)
     ]
     """
-    
     items = [
         Item("Item 1",  2, 16),
         Item("Item 2",  3, 19),
@@ -165,18 +162,10 @@ def main():
     print("Total weight:", solution.total_weight)
     TablePlotter.plot_table(table)
 
-
-def delayed_solve(visual_knspsack):
-    time.sleep(WAIT_UNTIL_VISUAL_SOLVE)
-    visual_knspsack.begin_solver()
-
-
 def visual_main():
     item_generator = ItemGenerator()
     items = item_generator.generate(ITEMS_TO_GENERATE)
     knapsack = VisualKnapsack(items, KNAPSACK_CAPACITY)
-    thread = Thread(target=delayed_solve, args=(knapsack,))
-    thread.start()
     knapsack.main_loop()
 
 

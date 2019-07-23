@@ -1,4 +1,6 @@
-import pygame
+import contextlib
+with contextlib.redirect_stdout(None):
+    import pygame
 from threading import Thread
 from KnapsackSolver import *
 import time
@@ -23,7 +25,9 @@ class VisualKnapsack:
         self.__have_to_solve = False
         self.__have_to_display_table = False
         self.__result_table = None
-        self.__knapsack_capacity = max_capacity
+        self.__total_knapsack_capacity = max_capacity
+        self.__used_knapsack_capacity = 0
+        self.__knapsack_value = 0
         self.__items_inside = []
         self.__items_outside = []
         self.__items_to_solve = []
@@ -37,10 +41,11 @@ class VisualKnapsack:
         self.__screen.fill(BLACK_COLOR)
         pygame.display.flip()
         self.set_items_to_solve(items)
+        print("\nPresiona la tecla 'ENTER' o 'SPACE' para comenzar la resolución")
 
     def main_loop(self):
         while(self.__running):
-            self.__detect_exit()
+            self.__detect_events()
             self.__check_if_have_to_solve()
             self.__screen.fill(BLACK_COLOR)
             self.__draw_screen()
@@ -48,10 +53,13 @@ class VisualKnapsack:
             self.__check_if_have_to_display_table()
             time.sleep(0.5)
 
-    def __detect_exit(self):
+    def __detect_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.__running = False
+            if event.type == pygame.KEYDOWN:
+                if(event.key == pygame.K_RETURN or event.key == pygame.K_SPACE):
+                    self.__have_to_solve = True
 
     def __check_if_have_to_solve(self):
         if(not self.__have_to_solve):
@@ -62,7 +70,7 @@ class VisualKnapsack:
         pygame.display.flip()
         print("Solver started!")
         solution, self.__result_table = self.__solver.solve(
-            self.__items_to_solve, self.__knapsack_capacity)
+            self.__items_to_solve, self.__total_knapsack_capacity)
         # self.__solver.print_table()
         print("\nSolution:", [x.id for x in solution.items])
         print("Total value:", solution.total_value)
@@ -75,6 +83,8 @@ class VisualKnapsack:
                 self.__items_inside.append(item)
             else:
                 self.__items_outside.append(item)
+        self.__knapsack_value = solution.total_value
+        self.__used_knapsack_capacity = solution.total_weight
         self.__have_to_display_table = True
         self.__have_to_solve = False
 
@@ -89,7 +99,7 @@ class VisualKnapsack:
         self.__screen.blit(RESOURCES["knapsack"], (int(WIDTH / 2), 0))
         self.__draw_items_inside_knapsack()
         self.__draw_items_outside_knapsack()
-        self.__draw_knapsack_capacity()
+        self.__draw_knapsack_data()
 
     def __draw_items_inside_knapsack(self):
         self.__draw_items(self.__items_inside, int(
@@ -123,15 +133,16 @@ class VisualKnapsack:
 
     def __draw_solving_message(self):
         renderer = pygame.font.SysFont('Comic Sans MS', 60)
-        value_text = renderer.render("Resolviendo...", False, GREEN_COLOR)
-        self.__screen.blit(value_text, (int(WIDTH / 2) - int(WIDTH / 6), int(HEIGHT / 2) - int(HEIGHT / 8)))
+        solving_text = renderer.render("Resolviendo...", False, GREEN_COLOR)
+        self.__screen.blit(solving_text, (int(WIDTH / 2) - int(WIDTH / 6), int(HEIGHT / 2) - int(HEIGHT / 8)))
 
 
-    def __draw_knapsack_capacity(self):
+    def __draw_knapsack_data(self):
         renderer = pygame.font.SysFont('Comic Sans MS', 20)
-        value_text = renderer.render("Capacidad: " + str(self.__knapsack_capacity), False, WHITE_COLOR)
-        self.__screen.blit(value_text, (int(WIDTH / 2) + int(WIDTH / 6) + 20, 2))
-
+        capacity_text = renderer.render("Capacidad: " + str(self.__used_knapsack_capacity) + " / "+ str(self.__total_knapsack_capacity), False, WHITE_COLOR)
+        self.__screen.blit(capacity_text, (int(WIDTH / 2) + 25, 2))
+        value_text = renderer.render("Valor: " + str(self.__knapsack_value), False, WHITE_COLOR)
+        self.__screen.blit(value_text, (int(WIDTH / 2) + int(WIDTH / 4) + 125, 2))
 
     def set_items_to_solve(self, items):
         self.__items_to_solve=items

@@ -12,7 +12,7 @@ class KnapsackSolver:
 
     def solve(self, items, capacity):
         self.__generate_table(items, capacity)
-        for i_index, item in enumerate(items):
+        for item in items:
             self.__add_item_to_table(item)
         if(USE_BACKTRACE):
             return self.__backtrace_table(items)
@@ -44,58 +44,28 @@ class KnapsackSolver:
             print("Validacion de backtrace erronea!")
             print("El resultado correcto es:", [x.id for x in self.__table[len(
                 self.__table) - 1][len(self.__table[0]) - 1].items])
-    """
-    def __get_best_cell_where_fits(self, current_row, column, item):
-        max_weight = current_row
-        max_cell = column[0]
-        for i in range(len(column)):
-            if(current_row - i <= 0):
-                return max_cell
-            cell = column[current_row - i]
-            evaluated_value = cell.evaluate_value(item)
-            if(cell.could_add_item(item, max_weight) and evaluated_value > max_cell.total_value + item.value):
-                max_cell = cell
-    """
-
-    def __get_previous_value_in_column(self, current_row, column):
-        comparison_value = column[current_row].total_value
-        for i in range(1, len(column)):
-            if(current_row - i < 0):
-                return column[0]
-            if(column[current_row - i].total_value == comparison_value - column[current_row].get_last_item().value):
-                return column[current_row - i]
-
-    def __get_best_cell_where_fits(self, max_weight, column, item):
-        prev_cell = column[max_weight]
-        prev_cell_without_weight = column[max_weight - item.weight]
-        cell_without_item = self.__get_previous_value_in_column(max_weight, column)
-        ret = None
-        prev_cell_value_for_compare = 0
-        if(prev_cell.could_add_item(item, max_weight)):
-            ret = prev_cell
-            prev_cell_value_for_compare += item.value
-        if(prev_cell_without_weight.could_add_item(item, max_weight) and prev_cell_without_weight.evaluate_value(item) > prev_cell_value_for_compare):
-            ret = prev_cell_without_weight
-        return ret
 
     def __add_item_to_table(self, item):
-        for x in range(len(self.__table[0])):
+        for current_weight in range(len(self.__table[0])):
             # ESTRUCTURA DE LA TABLA: self.__table [COLUMNA] [FILA]
-            if(x >= item.weight):
-                best_cell_where_fits = self.__get_best_cell_where_fits(
-                    x, self.__table[self.__table_index - 1], item)
-                if(best_cell_where_fits == None):
-                    best_cell_where_fits = TableCell()
-                else:
-                    best_cell_where_fits = best_cell_where_fits.clone()
-                best_cell_where_fits.add_item(item)
+            if(current_weight >= item.weight):
+                prev_cell = self.__table[self.__table_index - 1][current_weight]
+                prev_cell_without_weight = self.__table[self.__table_index - 1][current_weight - item.weight]
+                current_cell = TableCell()
+                prev_cell_value_for_comparison = 0
+                if(prev_cell.could_add_item(item, current_weight)):
+                    current_cell = prev_cell.clone()
+                    prev_cell_value_for_comparison += item.value
+                if(prev_cell_without_weight.could_add_item(item, current_weight) and prev_cell_without_weight.evaluate_value(item) > prev_cell_value_for_comparison):
+                    current_cell = prev_cell_without_weight.clone()
+                current_cell.add_item(item)
                 # Comparamos la mejor celda donde entra el item contra la celda de la misma fila en la columna anterior
-                if(best_cell_where_fits.total_value > self.__table[self.__table_index - 1][x].total_value):
-                    self.__table[self.__table_index][x] = best_cell_where_fits
+                if(current_cell.total_value > self.__table[self.__table_index - 1][current_weight].total_value):
+                    self.__table[self.__table_index][current_weight] = current_cell
                 else:
-                    self.__table[self.__table_index][x] = self.__table[self.__table_index - 1][x].clone()
+                    self.__table[self.__table_index][current_weight] = self.__table[self.__table_index - 1][current_weight].clone()
             else:
-                self.__table[self.__table_index][x] = self.__table[self.__table_index - 1][x].clone()
+                self.__table[self.__table_index][current_weight] = self.__table[self.__table_index - 1][current_weight].clone()
         if(self.__table_index < len(self.__table) - 1):
             self.__table_index += 1
 
