@@ -159,5 +159,12 @@ class Test(unittest.TestCase):
         self.assertEqual(solution.total_value, 44)
         self.assertEqual(solution.total_weight, 7)
 
+    """
+    def test_dataset_4(self):
+        solution = self.get_solution(1000, DATASET_4)
+        self.assertEqual(solution.total_value, 9147)
+        self.assertEqual(solution.total_weight, 985)
+    """
+    
 if __name__ == '__main__':
     unittest.main()
