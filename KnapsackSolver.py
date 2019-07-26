@@ -1,7 +1,7 @@
 from TableCell import *
 from copy import deepcopy
 
-USE_BACKTRACE = True
+USE_TRACEBACK = True
 
 
 class KnapsackSolver:
@@ -14,11 +14,11 @@ class KnapsackSolver:
         self.__generate_table(items, capacity)
         for item in items:
             self.__add_item_to_table(item)
-        if(USE_BACKTRACE):
-            return self.__backtrace_table(items)
+        if(USE_TRACEBACK):
+            return self.__traceback_table(items)
         return self.__table[len(self.__table) - 1][capacity], self.__table
 
-    def __backtrace_table(self, items):
+    def __traceback_table(self, items):
         cell = TableCell()
         col = len(self.__table) - 1
         row = len(self.__table[0]) - 1
@@ -30,10 +30,10 @@ class KnapsackSolver:
                 while(row > 1 and self.__table[col - 1][row - 1].total_value >= dif):
                     row -= 1
             col -= 1
-        self.__validate_backtrace(cell)
+        self.__validate_traceback(cell)
         return cell, self.__table
 
-    def __validate_backtrace(self, cell):
+    def __validate_traceback(self, cell):
         quant_in = 0
         for x in self.__table[len(self.__table) - 1][len(self.__table[0]) - 1].items:
             for y in cell.items:
@@ -41,7 +41,7 @@ class KnapsackSolver:
                     quant_in += 1
         if((quant_in != len(cell.items) or len(cell.items) != len(self.__table[len(self.__table) - 1][len(self.__table[0]) - 1].items)) and
                 (cell.total_value != self.__table[len(self.__table) - 1][len(self.__table[0]) - 1].total_value)):
-            print("Validacion de backtrace erronea!")
+            print("Validacion de traceback erronea!")
             print("El resultado correcto es:", [x.id for x in self.__table[len(
                 self.__table) - 1][len(self.__table[0]) - 1].items])
 

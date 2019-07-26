@@ -6,7 +6,7 @@ import time
 
 #Para el resolverdor visual con pygame
 RUN_VISUAL = False
-ITEMS_TO_GENERATE = 117  # Max visible 117
+ITEMS_TO_GENERATE = 16  # Max visible 117
 
 if RUN_VISUAL:
     from VisualKnapsack import *
